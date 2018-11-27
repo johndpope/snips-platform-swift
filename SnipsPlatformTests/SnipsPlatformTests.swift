@@ -32,6 +32,7 @@ class SnipsPlatformTests: XCTestCase {
     var onSessionEndedHandler: ((SessionEndedMessage) -> ())?
     var onListeningStateChanged: ((Bool) -> ())?
     var onIntentNotRecognizedHandler: ((IntentNotRecognizedMessage) -> ())?
+    var onTextCapturedHandler: ((TextCapturedMessage) -> ())?
     
     let hotwordAudioFile = "hey snips"
     let weatherAudioFile = "What will be the weather in Madagascar in two days"
@@ -373,6 +374,28 @@ class SnipsPlatformTests: XCTestCase {
              timeout: 100,
              enforceOrder: true)
     }
+    
+    func test_asr_text_captured_handler() {
+        let onTextCaptured = expectation(description: "ASR Text was captured")
+        
+        onSessionStartedHandler = { [weak self] message in
+            DispatchQueue.main.sync {
+                self?.playAudio(forResource: self?.weatherAudioFile, withExtension: "m4a")
+            }
+        }
+        
+        onTextCapturedHandler = { [weak self] message in
+            if message.text == self?.weatherAudioFile.lowercased() {
+                onTextCaptured.fulfill()
+            } else {
+                XCTFail("Text captured wasn't equal to the text sent")
+            }
+        }
+        
+        try! snips?.startSession(text: nil, intentFilter: nil, canBeEnqueued: false, sendIntentNotRecognized: true, customData: nil, siteId: nil)
+        
+        wait(for: [onTextCaptured], timeout: 20)
+    }
 }
 
 extension SnipsPlatformTests {
@@ -405,7 +428,9 @@ extension SnipsPlatformTests {
         snips?.onIntentNotRecognizedHandler = { [weak self] message in
             self?.onIntentNotRecognizedHandler?(message)
         }
-        
+        snips?.onTextCapturedHandler = { [weak self] message in
+            self?.onTextCapturedHandler?(message)
+        }
         try! snips?.start()
     }
     
