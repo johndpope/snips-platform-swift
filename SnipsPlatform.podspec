@@ -12,30 +12,27 @@ Pod::Spec.new do |s|
   s.license =  'Apache 2.0 / MIT'
   s.author = { 'Snips' => 'contact@snips.ai' }
 
-  s.ios.deployment_target = '11.0'
-
   s.source = {
     :git => 'https://github.com/snipsco/snips-platform-swift.git',
     :tag => s.version.to_s
   }
-  s.source_files  = 'SnipsPlatform/*.{swift,h}'
+  s.source_files = 'SnipsPlatform/*.{swift,h}'
   s.preserve_paths = 'Dependencies'
 
-  s.prepare_command = <<-CMD
-    mkdir -p Dependencies/ios && cd "$_"
-    if [ -n "$(find . -maxdepth 0 -type d -empty 2>/dev/null)" ]; then
-        echo "Downloading core-platform..."
-        curl -s https://s3.amazonaws.com/snips/snips-platform-dev/snips-platform-ios.#{s.version.to_s}.tgz | tar zxv
-    else
-        echo "Dependencies/ios isn't empty. Skipping download core-platform..."
-        ls -l
-    fi
-    CMD
-  s.pod_target_xcconfig = {
+  s.prepare_command = 'sh scripts/download_core.sh'
+
+  s.ios.deployment_target = '11.0'
+  s.ios.pod_target_xcconfig = {
     'ENABLE_BITCODE' => 'NO',
     'SWIFT_INCLUDE_PATHS' => '"${SRCROOT}/SnipsPlatform/Dependencies/ios"',
     'LIBRARY_SEARCH_PATHS' => '"${SRCROOT}/SnipsPlatform/Dependencies/ios"',
     'VALID_ARCHS' => 'arm64',
+  }
+
+  s.osx.deployment_target = '10.11'
+  s.osx.pod_target_xcconfig = {
+    'SWIFT_INCLUDE_PATHS' => '"${SRCROOT}/SnipsPlatform/Dependencies/macos"',
+    'LIBRARY_SEARCH_PATHS' => '"${SRCROOT}/SnipsPlatform/Dependencies/macos"',
   }
 
   s.frameworks = 'Accelerate'

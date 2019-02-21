@@ -59,7 +59,6 @@
 		F746A2BA1FCC1951005E09E9 /* Ontology.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ontology.swift; sourceTree = "<group>"; };
 		F76DFB8A2032ECB10021D6F9 /* String+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Utils.swift"; sourceTree = "<group>"; };
 		F76DFB8C203319230021D6F9 /* COntology.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = COntology.swift; sourceTree = "<group>"; };
-		F79B6F5820120DA700394C57 /* Dependencies */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Dependencies; sourceTree = "<group>"; };
 		F7BB4F9F215A382E00FEEA43 /* SnipsPlatform.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SnipsPlatform.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F7BB4FA7215A382E00FEEA43 /* AllTests-macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AllTests-macOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F7BB4FBB215A39C700FEEA43 /* SnipsPlatform.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SnipsPlatform.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -135,7 +134,6 @@
 				F7CF58A21FBDA00200027852 /* SnipsPlatformTests */,
 				F7CF58961FBDA00200027852 /* Products */,
 				F704946B1FBDCC3800FFD0B8 /* Frameworks */,
-				F79B6F5820120DA700394C57 /* Dependencies */,
 			);
 			sourceTree = "<group>";
 		};
@@ -431,7 +429,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "$PROJECT_DIR/scripts/download_core.sh macos\n";
+			shellScript = "SNIPS_FORCE_REINSTALL=1 SNIPS_USE_LOCAL=1 $PROJECT_DIR/scripts/download_core.sh\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
